@@ -3,23 +3,21 @@ import numpy as np
 from ultralytics import YOLO
 import math
 import pyautogui
-
-
-from sort import* # required for creating ids and counting unique bodies
+from sort import*
 import cvzone
 
 
 
 
-cap = cv2.VideoCapture("movingfinger.mp4")
+#cap = cv2.VideoCapture("movingfinger.mp4")
 
-# cap = cv2.VideoCapture(1) # webcam: 0 if no external webcam
-# cap.set(3,1280)
-# cap.set(4, 720)
+cap = cv2.VideoCapture(1) # webcam: 0 if no external webcam
+cap.set(3,1280)
+cap.set(4, 720)
 
-model = YOLO('best.pt')
+model = YOLO('best2.pt')
 
-classNames = ['1', '2', '3', '4']
+classNames = ['5_L - v6 5_new_blur', 'testingground_3.0 - v1 2023-06-11 9-23pm']
 
 # make the mask layer
 mask = cv2.imread("mask.jpg")
@@ -73,9 +71,9 @@ while True:
 
             # the ideal location of detection is not too far or too close
 
-            if currentCls in ['1', '2', '3', '4']: #and conf > 0.3: # only runs if it is a person and if confidence is > than
+            if currentCls in ['5_L - v6 5_new_blur', 'testingground_3.0 - v1 2023-06-11 9-23pm']: #and conf > 0.3: # only runs if it is a person and if confidence is > than
 
-                cvzone.putTextRect(img, f'{classNames[cls]} {conf}',(max(0, x1), max(35, y1)), scale=1, thickness=1, offset=3)
+                cvzone.putTextRect(img, f' palm detected {conf}',(max(0, x1), max(35, y1)), scale=1, thickness=1, offset=3)
                 currentArray = np.array([x1,y1,x2,y2,conf])
                 detections = np.vstack((detections,currentArray))
 
@@ -94,7 +92,7 @@ while True:
         w, h = x2 - x1, y2 - y1
 
         cvzone.cornerRect(img, (x1, y1, w, h), l=8, rt=2, colorR=(255,0,0))
-        cvzone.putTextRect(img, f'{int(Id)}', (max(0, x1), max(35, y1)), scale=2, thickness=1, offset=10)
+        #cvzone.putTextRect(img, f'{int(Id)}', (max(0, x1), max(35, y1)), scale=2, thickness=1, offset=10)
 
 
         # finding the center of the boxes to check if it crossed line
@@ -106,17 +104,18 @@ while True:
         print(cx,cy)
         print(lineLeft[0]-20 < cx < lineLeft[0]+20)
         print(lineLeft[1]< cy < lineLeft[2])
-        if lineLeft[0]-20 < cx < lineLeft[0]+20 and lineLeft[1]< cy < lineLeft[3]:
+        if lineLeft[0]-50 < cx < lineLeft[0]+50 and lineLeft[1]< cy < lineLeft[3]:
             if Id not in totalCountUp:
+                pyautogui.press('prevtrack')
                 totalCountUp.append(Id)
                 cv2.line(img, (lineLeft[0], lineLeft[1]), (lineLeft[2], lineLeft[3]), (0, 0, 255), 5)
-                pyautogui.press('prevtrack')
 
-        if lineRight[0]-20 < cx < lineRight[0]+20 and lineRight[1]< cy < lineRight[3]:
+
+        if lineRight[0]-50 < cx < lineRight[0]+50 and lineRight[1]< cy < lineRight[3]:
             if Id not in totalCountDown:
+                pyautogui.press('nexttrack')
                 totalCountDown.append(Id)
                 cv2.line(img, (lineRight[0], lineRight[1]), (lineRight[2], lineRight[3]), (0, 0, 255), 5)
-                pyautogui.press('nexttrack')
 
         #cvzone.putTextRect(img, f'cars: {len(totalCount)}', (50, 50), scale=2, thickness=1, offset=10)
     #
