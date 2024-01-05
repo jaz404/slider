@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 import math
+import pyautogui
+
 
 from sort import* # required for creating ids and counting unique bodies
 import cvzone
@@ -101,15 +103,21 @@ while True:
         cv2.circle(img, (cx,cy),2,(0,255,0),cv2.FILLED)
 
         # if it crosses:
-        if lineLeft[0]-20 < cx < lineLeft[0]+20 and lineLeft[1]< cy < lineLeft[2]:
+        print(cx,cy)
+        print(lineLeft[0]-20 < cx < lineLeft[0]+20)
+        print(lineLeft[1]< cy < lineLeft[2])
+        if lineLeft[0]-20 < cx < lineLeft[0]+20 and lineLeft[1]< cy < lineLeft[3]:
             if Id not in totalCountUp:
                 totalCountUp.append(Id)
                 cv2.line(img, (lineLeft[0], lineLeft[1]), (lineLeft[2], lineLeft[3]), (0, 0, 255), 5)
+                pyautogui.press('prevtrack')
 
-        if lineRight[0]-20 < cx < lineRight[0]+20 and lineRight[1]< cy < lineRight[2]:
+        if lineRight[0]-20 < cx < lineRight[0]+20 and lineRight[1]< cy < lineRight[3]:
             if Id not in totalCountDown:
                 totalCountDown.append(Id)
                 cv2.line(img, (lineRight[0], lineRight[1]), (lineRight[2], lineRight[3]), (0, 0, 255), 5)
+                pyautogui.press('nexttrack')
+
         #cvzone.putTextRect(img, f'cars: {len(totalCount)}', (50, 50), scale=2, thickness=1, offset=10)
     #
     cv2.putText(img, str(len(totalCountUp)),(300,300),cv2.FONT_HERSHEY_PLAIN,5,(139,195,75),8)
