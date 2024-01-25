@@ -71,7 +71,7 @@ while True:
 
             # the ideal location of detection is not too far or too close
 
-            if currentCls in ['5_L - v6 5_new_blur', 'testingground_3.0 - v1 2023-06-11 9-23pm']: #and conf > 0.3: # only runs if it is a person and if confidence is > than
+            if currentCls in ['5_L - v6 5_new_blur', 'testingground_3.0 - v1 2023-06-11 9-23pm']: #and conf > 0.3: # only runs if it is a palm and if confidence is > than
 
                 cvzone.putTextRect(img, f' palm detected {conf}',(max(0, x1), max(35, y1)), scale=1, thickness=1, offset=3)
                 currentArray = np.array([x1,y1,x2,y2,conf])
